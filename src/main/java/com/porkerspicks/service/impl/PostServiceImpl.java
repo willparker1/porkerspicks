@@ -27,7 +27,11 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(post);
     }
 
-    public Post findPost(Integer id ) {
+    public Post findPost( Integer id ) {
         return postRepository.findById(id).get();
+    }
+
+    public void deletePost( Integer id ) {
+         postRepository.deleteById(id);
     }
 }

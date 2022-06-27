@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>Create Post</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -19,18 +20,10 @@
 	</nav>
 	<div class="container">
 		<div class = "row">
-			<div th:with="actionUrl='', pageHeader=''" class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-				<div th:switch="${post.version}">
-					<p th:case="'0'">
-						<span th:with="actionUrl='/posts', pageHeader='Create Form'"/>
-					</p>
-					<p th:case="*">
-						<span th:with="actionUrl='/posts/{id} (id=${post.id})', pageHeader='Update Form'"/>
-					</p>
-				</div>
-				<h1 class="text-center"><span th:text="${pageHeader}" /></h1>
-				<div class="card-body">
-					<form th:action="@{/${actionUrl}}" th:object="${post}" method="POST">
+			<div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+				<h1 class="text-center"><span th:text="${post.id==0} ? 'Create Form' : 'Update Form'" /></h1>
+				<div class="card-body" th:with="actionUrl=${post.id==0} ? '/posts' : '/posts/update/'+${post.id}" >
+					<form th:action="@{${actionUrl}}" th:object="${post}" method="POST">
 						<div class="form-group">
 							<label>Title</label>
 							<input type="text" name="title" th:field="*{title}" class="form-control" placeholder="Enter title for the Post" />
@@ -44,7 +37,7 @@
 						</div>
 					</form>
 				</div>
-			</div>
+			</div></div>
 		</div>
 	</div>
 </body>

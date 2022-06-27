@@ -12,4 +12,6 @@ public interface PostService {
     public Post savePost( Post post );
 
     public Post findPost(Integer id );
+
+    public void deletePost( Integer id );
 }
