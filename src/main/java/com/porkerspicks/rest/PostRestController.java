@@ -2,14 +2,17 @@ package com.porkerspicks.rest;
 
 import com.porkerspicks.domain.Post;
 import com.porkerspicks.service.PostService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("posts/v1")
+@RequestMapping(value = "posts/v1", produces = "application/json")
 public class PostRestController {
 
     private final PostService postService;
@@ -24,31 +27,37 @@ public class PostRestController {
     }
 
     @GetMapping("/{id}")
-    public Post editPost( @PathVariable Integer id, Model model  ) {
-        return postService.findPost(id);
+    public ResponseEntity<Post> getPost(@PathVariable Integer id  ) {
+        Post savedPost = postService.findPost(id);
+        HttpStatus httpStatus = HttpStatus.OK;
+        if ( savedPost == null ) {
+            httpStatus = HttpStatus.NOT_FOUND;
+        }
+        return new ResponseEntity<>( savedPost, httpStatus);
     }
 
-    @PostMapping
-    public Post savePost( Post post ) {
+    @PostMapping(consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post addPost( @RequestBody Post post ) {
         return postService.savePost(post);
     }
 
-    @PatchMapping("/{id}")
-    public Post patchPost( @PathVariable Integer id, Post post ) {
+    @PatchMapping(path="/{id}", consumes = "application/json")
+    public Post patchPost( @PathVariable Integer id, @RequestBody Post post ) {
         Post existingPost = postService.findPost(id);
         existingPost.setTitle(post.getTitle());
         existingPost.setContent(post.getContent());
         return postService.savePost( existingPost );
     }
 
-    @PutMapping("/{id}")
-    public Post updatePost( @PathVariable Integer id, Post post ) {
+    @PutMapping(path="/{id}", consumes = "application/json")
+    public Post updatePost( @PathVariable Integer id, @RequestBody Post post ) {
         return postService.savePost( post );
     }
 
     @DeleteMapping("/{id}")
-    public String editPost( @PathVariable Integer id ) {
+    @ResponseStatus(code=HttpStatus.NO_CONTENT)
+    public void deletePost( @PathVariable Integer id ) {
         postService.deletePost( id );
-        return "redirect:/posts";
     }
 }
