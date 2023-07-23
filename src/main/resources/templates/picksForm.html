@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Create Picks</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+	<a class="navbar-brand" href="#">Porkers Picks</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="collapsibleNavbar">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a th:href="@{/posts}">Post List</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+<div class="container">
+	<div class = "row">
+		<div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+			<h1 class="text-center"><span th:text="${post.id==0 } ? 'Create Form' : 'Update Form'" /></h1>
+			<div class="card-body">
+				<form th:action="@{${post.id==0} ? '/posts' : '/posts/update/'+${post.id}}" th:object="${post}" method="POST">
+					<div class="form-group">
+						<label>Title</label>
+						<input type="text" name="title" th:field="*{title}" class="form-control" placeholder="Enter title for the Post" />
+					</div>
+					<div class="form-group">
+						<label>Content</label>
+						<textarea name="content" cols="80" rows="20" th:field="*{content}" class="form-control" placeholder="Enter detail of the Post" />
+					</div>
+					<div class="box-footer">
+						<button type="submit" class="btn btn-primary">Save</button>
+					</div>
+					<div class="box-footer">
+						<button type="submit" class="btn btn-primary">Publish</button>
+					</div>
+				</form>
+			</div>
+		</div></div>
+	</div>
+</div>
+
+
+
+<div th:unless="${#lists.isEmpty(post.picks)}">
+<div class="container">
+	<div class = "row">
+		<h1>Picks</h1>
+	</div>
+	<table class="table table-striped table-bordered">
+		<thead class="table-dark">
+		<tr>
+			<th>Stake</th>
+			<th>Team</th>
+			<th>Price</th>
+			<th>Forecast</th>
+			<th>Bet Type</th>
+			<th>Competition</th>
+			<th>Venue</th>
+			<th>Opposition</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr th:each = "pick: {post.picks}">
+				<td th:text = "${pick.stake}"></td>
+				<td th:text = "${pick.team}"></td>
+				<td th:text = "${pick.price}"></td>
+				<td th:text = "${pick.forecast}"></td>
+				<td th:text = "${pick.betType}"></td>
+				<td th:text = "${pick.competition}"></td>
+				<td th:text = "${pick.venue}"></td>
+				<td th:text = "${pick.opposition}"></td>
+				<td>
+					<a th:href="@{/picks/edit/{postId}(postId=${post.id})}" class="btn btn-primary">Edit</a>
+					<a th:href="@{/picks/delete/{pickId}(pickId=${pick.id})}" class="btn btn-danger">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</div>
+<div th:if="${#lists.isEmpty(picks)}">
+	<p>No picks available.</p>
+</div>
+
+	<h3>Add / Edit Pick</h3>
+	<form method="POST">
+		<label for="team">Team:</label>
+		<select name="team">
+			<option th:each="teamOpt : ${T(com.porkerspicks.domain.types.TeamType).values()}"
+					th:value="${teamOpt}" th:text="${teamOpt}"></option>
+		</select>
+		<label for="opposition">Opposition:</label>
+		<select name="oppo">
+			<option th:each="teamOpt : ${T(com.porkerspicks.domain.types.TeamType).values()}"
+					th:value="${teamOpt}" th:text="${teamOpt}"></option>
+		</select>
+		<input type="text" name="opposition" size="50" /><br />
+		<label for="price">Price:</label>
+		<input type="text" name="price" size="15" /><br />
+		<label for="stake">Stake:</label><br />
+		<input type="text" name="price" size="15" /><br />
+		<br /> <input type="submit"></input>
+	</form>
+</body>
+</html>

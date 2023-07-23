@@ -1,0 +1,53 @@
+<html xlmms:th="http://www.thymeleaf.org">
+	<head>
+		<title>Latest Posts</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	</head>
+<body>
+	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+		<a class="navbar-brand" href="#">Porkers Picks</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a th:href="@{/posts}">All Posts</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container">
+		<div class = "row">
+			<h1>All Posts</h1>
+		</div>
+		<div class = "row">
+			<div class = "col-lg-3">
+				<a th:href="@{/posts/create}" class="btn btn-primary btn-sm mb-3">Create Post</a>
+			</div>
+		</div>
+		<table class="table table-striped table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>Last Updated</th>
+					<th>Title</th>
+					<th>Content</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each = "post: ${posts}">
+					<td th:text = "${post.timestamp}"></td>
+					<td th:text = "${post.title}"></td>
+					<td th:text = "${post.content}"></td>
+					<td>
+						<a th:href="@{/posts/edit/{postId}(postId=${post.id})}" class="btn btn-primary">Edit</a>
+						<a th:href="@{/posts/delete/{postId}(postId=${post.id})}" class="btn btn-danger">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</body>
+</html>
