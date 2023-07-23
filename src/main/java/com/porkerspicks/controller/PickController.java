@@ -21,36 +21,42 @@ public class PickController {
         this.pickService = pickService;
     }
 
+    @GetMapping("/{postId}")
+    public String getAllPicksForPost( @PathVariable Integer postId, Model model ) {
+        model.addAttribute("picks", pickService.getAllPicksForPost( postId ) );
+        return "posts";
+    }
+
     @GetMapping("/create")
     public String createPick( Model model ) {
         model.addAttribute("pick", new Pick() );
-        return "postForm";
+        return "picksForm";
     }
 
     @GetMapping("/edit/{id}")
-    public String editPost( @PathVariable Integer id, Model model  ) {
-        model.addAttribute("post", postService.findPost(id) );
+    public String editPick( @PathVariable Integer id, Model model  ) {
+        model.addAttribute("post", pickService.findPick(id) );
         return "postForm";
     }
 
     @PostMapping
-    public String savePost( Post post ) {
-        postService.savePost(post);
-        return "redirect:/posts";
+    public String savePick( Pick pick ) {
+        pickService.savePick(pick);
+        return "redirect:/picks";
     }
 
     @PostMapping("/update/{id}")
-    public String updatePost( @PathVariable Integer id, Post post ) {
-        Post existingPost = postService.findPost(id);
-        existingPost.setTitle(post.getTitle());
-        existingPost.setContent(post.getContent());
-        postService.savePost( existingPost );
-        return "redirect:/posts";
+    public String updatePick( @PathVariable Integer id, Pick pick ) {
+        Pick existingPick = pickService.findPick(id);
+//        existingPick.setTitle(pick.getTitle());
+//        existingPick.setContent(pick.getContent());
+        pickService.savePick( existingPick );
+        return "redirect:/picks";
     }
 
     @GetMapping("/delete/{id}")
-    public String deletePost( @PathVariable Integer id ) {
-        postService.deletePost( id );
-        return "redirect:/posts";
+    public String deletePick( @PathVariable Integer id ) {
+        pickService.deletePick( id );
+        return "redirect:/picks";
     }
 }

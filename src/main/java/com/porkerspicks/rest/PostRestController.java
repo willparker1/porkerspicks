@@ -22,7 +22,7 @@ public class PostRestController {
     }
 
     @GetMapping
-    public List<Post> getAllPosts(Model model ) {
+    public List<Post> getAllPosts() {
         return postService.getAllPosts();
     }
 
@@ -52,6 +52,7 @@ public class PostRestController {
 
     @PutMapping(path="/{id}", consumes = "application/json")
     public Post updatePost( @PathVariable Integer id, @RequestBody Post post ) {
+        post.setId(id);
         return postService.savePost( post );
     }
 

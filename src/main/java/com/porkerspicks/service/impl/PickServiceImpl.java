@@ -21,6 +21,14 @@ public class PickServiceImpl implements PickService {
         this.pickRepository = pickRepository;
     }
 
+    public List<Pick> getAllPicksForPost( Integer id ) {
+        return pickRepository.findByPost_Id( id );
+    }
+
+    public List<Pick> getAllPicks() {
+        return pickRepository.findAll();
+    }
+
     public Pick savePick( Pick pick ) {
         pick.setTimestamp( new Date() );
         return pickRepository.save(pick);
